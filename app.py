@@ -1,29 +1,34 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect,url_for
 app = Flask(__name__)
 
 @app.route('/')
-def login():   
+def intro():   
     return render_template("auth/login.html")
 
 @app.route('/home')
-def home():   
+def home():
+    print("홈페이지로 이동")   
     return render_template("index.html")
 
 @app.route('/plus')
-def plus():   
+def plus(): 
+    print("더하기 연산")     
     return render_template("calculator/plus.html")
 
 
 @app.route('/minus')
 def minus():   
+    print("홈페이지로 이동")   
     return render_template("calculator/minus.html")
 
 @app.route('/multiple')
 def multiple():   
+    print("홈페이지로 이동")   
     return render_template("calculator/multiple.html")
 
 @app.route('/devide')
 def devide():   
+    print("홈페이지로 이동")   
     return render_template("calculator/devide.html")
 
 @app.route('/finance')
@@ -63,10 +68,23 @@ def retail_finance_automation():
     return render_template("esg/esg_system/retail_finance_automation.html")
 
 
-
+@app.route('/login',methods=["post"])
+def login():
+    print("로그인 알고리즘")
+    username = request.form.get('username')
+    password = request.form.get('password')
+    print("🙌username:", username)
+    print("👌password:", password)
+    if username =="kim" and password == '1234':
+        print("😊로그인 성공")
+        return redirect(url_for("home"))
+    else:   
+        print("😒로그인 실패")
+        return redirect(url_for("intro"))
+    
 
 
 if __name__ == '__main__':  
    app.run('0.0.0.0',port=5000,debug=True)
-   
+
    app.config['TEMPLATES_AUTO_RELOAD'] = True
