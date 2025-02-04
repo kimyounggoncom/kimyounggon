@@ -11,39 +11,40 @@
             height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* 🔹 위쪽으로 폼을 조금 이동 */
+            flex-direction: column; /* 🔹 세로 방향 정렬 */
+            padding: 80px 0; /* 🔹 위아래 공백을 늘림 */
             background-color: #f4f4f4;
         }
         .login-container {
-            width: 320px;
-            padding: 20px;
+            width: 400px;
+            padding: 30px;
             border: 1px solid #ddd;
             border-radius: 8px;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
             background-color: white;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            margin: 30px auto auto auto;  /* 🔹 위쪽 여백을 줄이고, 아래쪽 자동 조절 */
+            transform: translateY(-20px); /* 🔹 폼을 살짝 위로 올림 */
         }
         table {
             width: 100%;
         }
         td {
-            padding: 8px;
+            padding: 10px;
         }
         input {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
         .btn-container {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
         }
         button {
-            padding: 8px 15px;
+            padding: 10px 18px;
+            font-size: 16px;
             background-color: #007BFF;
             color: white;
             border: none;
@@ -56,23 +57,27 @@
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h3 style="text-align: center;">로그인</h3>
-        <form action="/login" method="post">
-            <table>
-                <tr>
-                    <td><label for="username">아이디:</label></td>
-                    <td><input type="text" id="username" name="username" required></td>
-                </tr>
-                <tr>
-                    <td><label for="password">비밀번호:</label></td>
-                    <td><input type="password" id="password" name="password" required></td>
-                </tr>
-            </table>
-            <div class="btn-container">
-                <button type="submit">로그인</button>
-            </div>
-        </form>
-    </div>
+    {% if login_failed %}
+        <h1>로그인 실패하셨습니다.</h1>
+    {% else %}
+        <div class="login-container">
+            <h3 style="text-align: center;">로그인</h3>
+            <form action="/login" method="post">
+                <table>
+                    <tr>
+                        <td><label for="username">아이디:</label></td>
+                        <td><input type="text" id="username" name="username" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="password">비밀번호:</label></td>
+                        <td><input type="password" id="password" name="password" required></td>
+                    </tr>
+                </table>
+                <div class="btn-container">
+                    <button type="submit">로그인</button>
+                </div>
+            </form>
+        </div>
+    {% endif %}
 </body>
 </html>

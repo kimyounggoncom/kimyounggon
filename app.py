@@ -12,7 +12,7 @@ def home():
 
 @app.route('/plus')
 def plus():   
-    print("플러스페이지지로 이동")   
+    print("플러스페이지로 이동")   
     return render_template("calculator/plus.html")
 
 
@@ -67,11 +67,6 @@ def esg_health_fin_qna():
 def retail_finance_automation():   
     return render_template("esg/esg_system/retail_finance_automation.html")
 
-@app.route('/fail')
-def fail():   
-    return render_template("auth/login.fail.html")
-
-
 
 @app.route('/login',methods=["POST"])
 def login():
@@ -85,13 +80,13 @@ def login():
         return redirect(url_for("home"))
     else:   
         print("😒로그인 실패")
-        return render_template("auth/login.fail.html")
+        return render_template("auth/login.html",login_failed = True)
+    
+    
     
 @app.route('/calc', methods=["POST", "GET"])
 def calc():
     print("❤️전송된 데이터 방식:", request.method)
-
-    
 
     if request.method == "POST":
         print("🤦‍♀️POST 방식으로 전송된 데이터")
@@ -112,7 +107,7 @@ def calc():
 
         print(f"{num1} {opcode} {num2} = {num3}")
         print("👍계산 성공👍")
-        return render_template("calculator/calc.html", num1 = num1, opcode = opcode, num2 = num2, num3 = num3)
+        return render_template("calculator/calc.html", num1= num1, opcode = opcode, num2 = num2, num3 = num3)
     else:
         return render_template("calculator/calc.html")
 
