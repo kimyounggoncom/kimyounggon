@@ -11,8 +11,8 @@ def home():
     return render_template("index.html")
 
 @app.route('/plus')
-def plus(): 
-    print("더하기 연산")     
+def plus():   
+    print("플러스페이지지로 이동")   
     return render_template("calculator/plus.html")
 
 
@@ -26,10 +26,10 @@ def multiple():
     print("홈페이지로 이동")   
     return render_template("calculator/multiple.html")
 
-@app.route('/devide')
-def devide():   
+@app.route('/divide')
+def divide():   
     print("홈페이지로 이동")   
-    return render_template("calculator/devide.html")
+    return render_template("calculator/divide.html")
 
 @app.route('/finance')
 def finance():   
@@ -67,6 +67,11 @@ def esg_health_fin_qna():
 def retail_finance_automation():   
     return render_template("esg/esg_system/retail_finance_automation.html")
 
+@app.route('/fail')
+def fail():   
+    return render_template("auth/login.fail.html")
+
+
 
 @app.route('/login',methods=["post"])
 def login():
@@ -80,9 +85,62 @@ def login():
         return redirect(url_for("home"))
     else:   
         print("😒로그인 실패")
-        return redirect(url_for("intro"))
+        return render_template("auth/login.fail.html")
     
+@app.route('/plus2', methods=["post"])
+def plus2():
+    print("➕더하기 연산")
+    num1 = request.form.get("num1")
+    num2 = request.form.get("num2")
+    print("👌num1:", num1)
+    print("😍num2:", num2)
+    num3 = int(num1) + int(num2)
+    print(f"{num1} + {num2} = {num3}")
+    print("👍더하기 성공👍")
+    return render_template("answer/plus.html", num1 = num1, num2 = num2, num3 = num3)
 
+@app.route('/minus2', methods=["post"])
+def minus2():
+    print("➖빼기 연산")
+    num1 = request.form.get("num1")
+    num2 = request.form.get("num2")
+    print("👌num1:", num1)
+    print("😍num2:", num2)
+    num3 = int(num1) - int(num2)
+    print(f"{num1} - {num2} = {num3}")
+    print("👍빼기 성공👍")
+    return render_template("answer/minus.html", num1 = num1, num2 = num2, num3 = num3)
+
+@app.route('/multiple2', methods=["post"])
+def multiple2():
+    print("✖️곱하기 연산")
+    num1 = request.form.get("num1")
+    num2 = request.form.get("num2")
+    print("👌num1:", num1)
+    print("😍num2:", num2)
+    num3 = int(num1) * int(num2)
+    print(f"{num1} * {num2} = {num3}")
+    print("👍곱하기 성공👍")
+    return render_template("answer/multiple.html", num1 = num1, num2 = num2, num3 = num3)
+
+@app.route('/divide2', methods=["post"])
+def divide2():
+    print("➗나누기 연산")
+    num1 = request.form.get("num1")
+    num2 = request.form.get("num2")
+    print("👌num1:", num1)
+    print("😍num2:", num2)
+    num3 = int(num1) / int(num2)
+    print(f"{num1} / {num2} = {num3}")
+    print("👍나누기 성공👍")
+    return render_template("answer/divide.html", num1 = num1, num2 = num2, num3 = num3)
+
+
+
+
+
+           
+    
 
 if __name__ == '__main__':  
    app.run('0.0.0.0',port=5000,debug=True)
