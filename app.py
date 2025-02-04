@@ -97,7 +97,7 @@ def calc():
         print("🤦‍♀️POST 방식으로 전송된 데이터")
         num1 = request.form.get("num1")
         num2 = request.form.get("num2")
-        opcode= request.form.get("opcode")
+        opcode = request.form.get("opcode")
         print("👌num1:", num1)
         print("😍num2:", num2)
         print("➕opcode:", opcode)
@@ -123,3 +123,4 @@ if __name__ == '__main__':
    app.run('0.0.0.0',port=5000,debug=True)
 
    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    
