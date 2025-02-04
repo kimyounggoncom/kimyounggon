@@ -6,12 +6,13 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>계산기 나눗셈만 처리하는 인공지능</h1>
-    <form action="/divide2" method="post">
+    <h1>사칙연산을 수행하는 인공지능</h1>
+    <form action="/calc" method="POST">
         <input type="text"  id="num1" placeholder="첫번째 수" name="num1">
-        <span> / </span>
-        <input type="text" id="num2" placeholder="두번째 수" name="num2">
+        <input type="text"  id="opcode" placeholder="+, -, *, /"   name="opcode">
+        <input type="text"  id="num2" placeholder="두번째 수" name="num2">
         <button type="submit" id="plus">결과보기</button>
-    </form>  
+    </form>
+    <h2>{{num1}} {{opcode}} {{num2}} = {{num3}}</h2>   
 </body>
 </html>

@@ -73,7 +73,7 @@ def fail():
 
 
 
-@app.route('/login',methods=["post"])
+@app.route('/login',methods=["POST"])
 def login():
     print("로그인 알고리즘")
     username = request.form.get('username')
@@ -87,60 +87,37 @@ def login():
         print("😒로그인 실패")
         return render_template("auth/login.fail.html")
     
-@app.route('/plus2', methods=["post"])
-def plus2():
-    print("➕더하기 연산")
-    num1 = request.form.get("num1")
-    num2 = request.form.get("num2")
-    print("👌num1:", num1)
-    print("😍num2:", num2)
-    num3 = int(num1) + int(num2)
-    print(f"{num1} + {num2} = {num3}")
-    print("👍더하기 성공👍")
-    return render_template("answer/plus.html", num1 = num1, num2 = num2, num3 = num3)
+@app.route('/calc', methods=["POST", "GET"])
+def calc():
+    print("❤️전송된 데이터 방식:", request.method)
 
-@app.route('/minus2', methods=["post"])
-def minus2():
-    print("➖빼기 연산")
-    num1 = request.form.get("num1")
-    num2 = request.form.get("num2")
-    print("👌num1:", num1)
-    print("😍num2:", num2)
-    num3 = int(num1) - int(num2)
-    print(f"{num1} - {num2} = {num3}")
-    print("👍빼기 성공👍")
-    return render_template("answer/minus.html", num1 = num1, num2 = num2, num3 = num3)
-
-@app.route('/multiple2', methods=["post"])
-def multiple2():
-    print("✖️곱하기 연산")
-    num1 = request.form.get("num1")
-    num2 = request.form.get("num2")
-    print("👌num1:", num1)
-    print("😍num2:", num2)
-    num3 = int(num1) * int(num2)
-    print(f"{num1} * {num2} = {num3}")
-    print("👍곱하기 성공👍")
-    return render_template("answer/multiple.html", num1 = num1, num2 = num2, num3 = num3)
-
-@app.route('/divide2', methods=["post"])
-def divide2():
-    print("➗나누기 연산")
-    num1 = request.form.get("num1")
-    num2 = request.form.get("num2")
-    print("👌num1:", num1)
-    print("😍num2:", num2)
-    num3 = int(num1) / int(num2)
-    print(f"{num1} / {num2} = {num3}")
-    print("👍나누기 성공👍")
-    return render_template("answer/divide.html", num1 = num1, num2 = num2, num3 = num3)
-
-
-
-
-
-           
     
+
+    if request.method == "POST":
+        print("🤦‍♀️POST 방식으로 전송된 데이터")
+        num1 = request.form.get("num1")
+        num2 = request.form.get("num2")
+        opcode= request.form.get("opcode")
+        print("👌num1:", num1)
+        print("😍num2:", num2)
+        print("➕opcode:", opcode)
+        if opcode == "+":
+            num3 = int(num1) + int(num2)
+        elif opcode == "-":
+            num3 = int(num1) - int(num2)
+        elif opcode == "/":
+            num3 = int(num1) / int(num2)
+        else:
+            num3 = int(num1) * int(num2)
+
+        print(f"{num1} {opcode} {num2} = {num3}")
+        print("👍계산 성공👍")
+        return render_template("calculator/calc.html", num1 = num1, opcode = opcode, num2 = num2, num3 = num3)
+    else:
+        return render_template("calculator/calc.html")
+
+
+
 
 if __name__ == '__main__':  
    app.run('0.0.0.0',port=5000,debug=True)
