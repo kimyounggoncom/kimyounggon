@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>할인 계산기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h2>할인 계산기</h2>
+    <form action="/discount" method="post">
+        <label for="amount">금액 입력 (원): </label>
+        <input type="number" name="amount" id="amount" placeholder="금액을 입력하세요" required>
+        <button type="submit">할인 적용</button>
+    </form>
+</body>
+</html>

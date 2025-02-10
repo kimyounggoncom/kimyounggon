@@ -1,4 +1,8 @@
 from flask import Flask, render_template, request, redirect,url_for
+from com.kimyoungoncom.auth.login_controller import LoginController
+from com.kimyoungoncom.calculator.calc_model import CalcModel
+from com.kimyoungoncom.calculator.calc_controller import CalcController
+from com.kimyoungoncom.auth.login_model import LoginModel
 app = Flask(__name__)
 
 @app.route('/')
@@ -67,23 +71,33 @@ def esg_health_fin_qna():
 def retail_finance_automation():   
     return render_template("esg/esg_system/retail_finance_automation.html")
 
+@app.route('/discount')
+def discount():
+    print("할인율 계산")
+    amount = request.form.get('amount')  
+    print("👌amount:", amount)
+    
 
-@app.route('/login',methods=["POST"])
+    return render_template("calculator/discount.html")
+
+
+@app.route('/login',methods=["POST"]) 
 def login():
     print("로그인 알고리즘")
-    username = request.form.get('username')
-    password = request.form.get('password')
+    username = request.form.get('username')  
+    password = request.form.get('password') 
     print("🙌username:", username)
     print("👌password:", password)
-    if username =="kim" and password == '1234':
-        print("😊로그인 성공")
-        return redirect(url_for("home"))
-    else:   
-        print("😒로그인 실패")
-        return render_template("auth/login.html",login_failed = True)
-    
-    
-    
+
+    login = LoginModel()
+    login.username = username
+    login.password = password
+
+    controller = LoginController()
+    resp: LoginModel = controller.getResult(login)
+
+    return redirect(url_for(resp.result))
+   
 @app.route('/calc', methods=["POST", "GET"])
 def calc():
     print("❤️전송된 데이터 방식:", request.method)
@@ -93,23 +107,23 @@ def calc():
         num1 = request.form.get("num1")
         num2 = request.form.get("num2")
         opcode = request.form.get("opcode")
-        print("👌num1:", num1)
-        print("😍num2:", num2)
-        print("➕opcode:", opcode)
-        if opcode == "+":
-            num3 = int(num1) + int(num2)
-        elif opcode == "-":
-            num3 = int(num1) - int(num2)
-        elif opcode == "/":
-            num3 = int(num1) / int(num2)
-        else:
-            num3 = int(num1) * int(num2)
 
-        print(f"{num1} {opcode} {num2} = {num3}")
+        calc = CalcModel()
+        calc.num1 = int(num1)
+        calc.num2 = int(num2)
+        calc.opcode = opcode
+
+        controller = CalcController()
+        resp: CalcModel = controller.getResult(calc)
+        
+        
+
+        print(f"{resp.num1} {resp.opcode} {resp.num2} = {resp.result}")
         print("👍계산 성공👍")
-        return render_template("calculator/calc.html", num1= num1, opcode = opcode, num2 = num2, num3 = num3)
+        return render_template("calculator/calc.html", num1= resp.num1, opcode = resp.opcode, num2 = resp.num2, num3 = resp.result )
     else:
         return render_template("calculator/calc.html")
+
 
 
 
