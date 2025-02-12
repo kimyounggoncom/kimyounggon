@@ -15,11 +15,7 @@
     </form>
 
     
+    {{ render_html | default('') | safe }}
     
-    {% if num3 %}
-    <h3>계산결과 : </h3>
-    <h2>{{num1}} {{opcode}} {{num2}} = {{num3}}</h2>  
-    {% endif %}
-
 </body>
 </html>

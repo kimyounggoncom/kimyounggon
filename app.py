@@ -1,8 +1,13 @@
 from flask import Flask, render_template, request, redirect,url_for
 from com.kimyoungoncom.auth.login_controller import LoginController
+from com.kimyoungoncom.calculator.bmi_controller import BmiController, BmiController
+from com.kimyoungoncom.calculator.bmi_model import BmiModel
 from com.kimyoungoncom.calculator.calc_model import CalcModel
 from com.kimyoungoncom.calculator.calc_controller import CalcController
 from com.kimyoungoncom.auth.login_model import LoginModel
+from com.kimyoungoncom.calculator.gugudan_controller import GugudanController
+from com.kimyoungoncom.calculator.gugudan_model import GugudanModel
+from com.kimyoungoncom.grade.grade_controller import GradeController
 app = Flask(__name__)
 
 @app.route('/')
@@ -71,30 +76,31 @@ def esg_health_fin_qna():
 def retail_finance_automation():   
     return render_template("esg/esg_system/retail_finance_automation.html")
 
-@app.route('/discount')
+@app.route('/discount', methods = ["POST","GET"])
 def discount():
     print("할인율 계산")
     amount = request.form.get('amount')  
     print("👌amount:", amount)
-    
 
+    if request.method == "POST":
+        print("🤦‍♀️POST 방식으로 전송된 데이터")
+        
     return render_template("calculator/discount.html")
 
 
 @app.route('/login',methods=["POST"]) 
 def login():
-    print("로그인 알고리즘")
+    print("❤️전송된 데이터 방식:", request.method)
+
     username = request.form.get('username')  
     password = request.form.get('password') 
     print("🙌username:", username)
     print("👌password:", password)
 
-    login = LoginModel()
-    login.username = username
-    login.password = password
+    
 
-    controller = LoginController()
-    resp: LoginModel = controller.getResult(login)
+    controller = LoginController(username, password)
+    resp: LoginModel = controller.getResult()
 
     return redirect(url_for(resp.result))
    
@@ -108,21 +114,91 @@ def calc():
         num2 = request.form.get("num2")
         opcode = request.form.get("opcode")
 
-        calc = CalcModel()
-        calc.num1 = int(num1)
-        calc.num2 = int(num2)
-        calc.opcode = opcode
 
-        controller = CalcController()
-        resp: CalcModel = controller.getResult(calc)
-        
-        
+        controller = CalcController(num1=num1 , opcode=opcode, num2=num2)
+        resp: CalcModel = controller.getResult()
 
-        print(f"{resp.num1} {resp.opcode} {resp.num2} = {resp.result}")
-        print("👍계산 성공👍")
-        return render_template("calculator/calc.html", num1= resp.num1, opcode = resp.opcode, num2 = resp.num2, num3 = resp.result )
+        render_html ='<h3>결과보기</h3>'
+        render_html += f'{resp.num1} {resp.opcode} {resp.num2} = {resp.result}'
+        
+        return render_template("calculator/calc.html", 
+                           render_html = render_html)
     else:
         return render_template("calculator/calc.html")
+    
+@app.route('/gugudan', methods = ["POST","GET"])
+def gugudan():
+    print("구구단 계산")
+
+    if request.method == "POST":
+        print("🤦‍♀️POST 방식으로 전송된 데이터")
+        dan = request.form.get("dan")  
+
+        controller = GugudanController(dan = dan)
+        resp: GugudanModel = controller.getResult()
+        for i in resp.result:
+            print(i)
+
+        render_html ='<h3>결과보기</h3>'
+        for i in resp.result:
+            render_html += i+"<br/>"
+        
+    
+        return render_template("calculator/gugudan.html", render_html = render_html)        
+    return render_template("calculator/gugudan.html")
+
+@app.route('/bmi', methods=["POST", "GET"])
+def bmi():
+    print("❤️전송된 데이터 방식:", request.method)
+
+    if request.method == "POST":
+        print("🤦‍♀️POST 방식으로 전송된 데이터")
+        height = request.form.get("height")
+        weight = request.form.get("weight")
+        
+        controller = BmiController(height=height, weight=weight)
+        resp: BmiModel = controller.getResult()
+
+        render_html ='<h3>결과보기</h3>'
+        render_html += f"{resp.height}cm {resp.weight}kg의 BMI는 {resp.result}"
+        
+        
+        return render_template("calculator/bmi.html", 
+                           render_html = render_html)
+    else:
+        print("🤦‍♀️GET 방식으로 전송된 데이터")
+        return render_template("calculator/bmi.html")
+    
+@app.route('/grade', methods=["POST", "GET"])
+def grade():
+    print("❤️전송된 데이터 방식:", request.method)
+
+    if request.method == "POST":
+        print("🤦‍♀️POST 방식으로 전송된 데이터")
+        name = request.form.get("name")
+        korean = request.form.get("korean")
+        english = request.form.get("english")
+        math = request.form.get("math")
+        society = request.form.get("society")
+        science = request.form.get("science")
+        
+        controller = GradeController(name=name, korean=korean, english=english,
+                                      math=math, society=society, science=science)
+        resp = controller.getResult()
+        
+       
+        render_html ='<h3>결과보기</h3>'
+        render_html += f"{resp.name}님의 학점은 {resp.result}입니다."
+        
+        return render_template("grade/grade.html", 
+                           render_html = render_html)
+    else:
+        print("🤦‍♀️GET 방식으로 전송된 데이터")
+        return render_template("grade/grade.html")
+    
+
+
+
 
 
 

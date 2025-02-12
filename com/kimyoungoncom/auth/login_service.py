@@ -15,10 +15,10 @@ class LoginService:
 
         if username =="kim" and password == '1234': 
             result = "home"
-        
-      
+            
         else:   
             result = "intro"
+
         login.result = result
 
         return login
